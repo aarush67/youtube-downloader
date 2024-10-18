@@ -4,14 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Video Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <h1>YouTube Video Downloader</h1>
-    <form id="videoForm">
-        <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" required>
-        <button type="submit">Download</button>
-    </form>
+    <input type="text" id="videoUrl" placeholder="Enter YouTube URL" required>
+    <button id="downloadButton">Download Video</button>
     <div id="result"></div>
+
+    <!-- Link to the external JavaScript file -->
     <script src="script.js"></script>
 </body>
 </html>
