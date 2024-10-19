@@ -1,23 +1,21 @@
-document.getElementById('downloadButton').addEventListener('click', async () => {
-    const url = document.getElementById('videoUrl').value;
+document.getElementById('downloadBtn').addEventListener('click', async () => {
+    const videoUrl = document.getElementById('videoUrl').value;
+    
     try {
-        const response = await fetch(`https://9c628245-3814-4ecd-a755-6d4de0467c5c-00-3tzwugoleljgd.spock.replit.dev/download?url=${encodeURIComponent(url)}`);
-        const data = await response.json();
+        const response = await fetch(`https://9c628245-3814-4ecd-a755-6d4de0467c5c-00-3tzwugoleljgd.spock.replit.dev/download?url=${encodeURIComponent(videoUrl)}`);
 
-        const resultDiv = document.getElementById('result');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        
         if (data.success) {
-            // Create a temporary link element for downloading
-            const a = document.createElement('a');
-            a.href = data.link; // Use the link provided by the backend
-            a.download = ''; // Set to an empty string to use the filename from the URL
-            document.body.appendChild(a);
-            a.click(); // Programmatically click the link to trigger download
-            document.body.removeChild(a); // Clean up
+            document.getElementById('result').innerHTML = `Download Link: <a href="${data.link}" target="_blank">${data.link}</a>`;
         } else {
-            resultDiv.innerHTML = `Error: ${data.error}`;
+            document.getElementById('result').textContent = `Error: ${data.error}`;
         }
     } catch (err) {
-        console.error('Error fetching the download link:', err);
-        document.getElementById('result').innerHTML = `Error fetching the download link: ${err.message}`;
+        document.getElementById('result').textContent = `Error fetching the download link: ${err.message}`;
     }
 });
