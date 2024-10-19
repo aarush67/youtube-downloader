@@ -1,57 +1,93 @@
-const form = document.getElementById("urlForm");
-const videoFormatSelect = document.getElementById("videoFormat");
-const audioFormatSelect = document.getElementById("audioFormat");
-const formatSelection = document.getElementById("formatSelection");
-const loadingIndicator = document.getElementById("loading");
-const resultParagraph = document.getElementById("result");
+document.addEventListener("DOMContentLoaded", () => {
+    const getFormatsBtn = document.getElementById("getFormatsBtn");
+    const videoUrlInput = document.getElementById("videoUrl");
+    const formatSelection = document.getElementById("formatSelection");
+    const videoFormatSelect = document.getElementById("videoFormat");
+    const audioFormatSelect = document.getElementById("audioFormat");
+    const streamBtn = document.getElementById("streamBtn");
+    const result = document.getElementById("result");
+    const loadingIndicator = document.getElementById("loading");
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault(); // Prevent the form from submitting normally
+    // Event listener to fetch available formats
+    getFormatsBtn.addEventListener("click", async () => {
+        const videoUrl = videoUrlInput.value;
 
-    const videoUrl = document.getElementById("videoUrl").value;
-    loadingIndicator.classList.remove('hidden'); // Show loading indicator
-
-    try {
-        const response = await fetch(`https://9c628245-3814-4ecd-a755-6d4de0467c5c-00-3tzwugoleljgd.spock.replit.dev/formats?url=${encodeURIComponent(videoUrl)}`);
-        const data = await response.json();
-
-        loadingIndicator.classList.add('hidden'); // Hide loading indicator
-
-        if (response.ok && data.success) {
-            // Clear previous options
-            videoFormatSelect.innerHTML = '';
-            audioFormatSelect.innerHTML = '';
-
-            // Populate video formats dropdown
-            const videoFormats = data.formats.filter(format => format.mime.includes('video/'));
-            videoFormats.forEach(format => {
-                const option = document.createElement('option');
-                option.value = format.itag;
-                option.textContent = `${format.resolution} (${format.quality})`;
-                videoFormatSelect.appendChild(option);
-            });
-
-            // Populate audio formats dropdown
-            const audioFormats = data.formats.filter(format => format.mime.includes('audio/'));
-            audioFormats.forEach(format => {
-                const option = document.createElement('option');
-                option.value = format.itag;
-                option.textContent = `${format.abr} kbps`;
-                audioFormatSelect.appendChild(option);
-            });
-
-            // Show format selection section if there are formats
-            if (videoFormats.length > 0 || audioFormats.length > 0) {
-                formatSelection.classList.remove('hidden');
-            } else {
-                resultParagraph.textContent = 'No valid formats available for this video.';
-            }
-        } else {
-            resultParagraph.textContent = `Error: ${data.error || 'Unknown error'}`;
+        if (!videoUrl) {
+            alert("Please enter a valid YouTube video URL.");
+            return;
         }
-    } catch (error) {
-        loadingIndicator.classList.add('hidden'); // Hide loading indicator
-        resultParagraph.textContent = `Error fetching the formats: ${error.message}`;
-        console.error(error);
+
+        loadingIndicator.classList.remove("hidden");
+        formatSelection.classList.add("hidden");
+        result.textContent = ""; // Clear previous result
+
+        try {
+            const response = await fetch(`https://9c628245-3814-4ecd-a755-6d4de0467c5c-00-3tzwugoleljgd.spock.replit.dev/formats?url=${encodeURIComponent(videoUrl)}`);
+            const data = await response.json();
+
+            if (data.success) {
+                populateFormatDropdowns(data.formats);
+                formatSelection.classList.remove("hidden");
+            } else {
+                alert(`Error fetching formats: ${data.error}`);
+            }
+        } catch (error) {
+            alert(`Error fetching formats: ${error.message}`);
+        } finally {
+            loadingIndicator.classList.add("hidden");
+        }
+    });
+
+    // Function to populate dropdowns with formats
+    function populateFormatDropdowns(formats) {
+        // Clear previous options
+        videoFormatSelect.innerHTML = "";
+        audioFormatSelect.innerHTML = "";
+
+        formats.forEach((format) => {
+            // Only include formats with audio and video
+            if (format.mime.includes("video") && format.abr) {
+                const option = document.createElement("option");
+                option.value = format.itag;
+                option.textContent = `${format.resolution} - ${format.quality} - ${format.abr}`;
+                videoFormatSelect.appendChild(option);
+            }
+
+            if (format.mime.includes("audio")) {
+                const option = document.createElement("option");
+                option.value = format.itag;
+                option.textContent = `${format.abr} - ${format.mime}`;
+                audioFormatSelect.appendChild(option);
+            }
+        });
     }
+
+    // Event listener to get streaming URL
+    streamBtn.addEventListener("click", async () => {
+        const videoUrl = videoUrlInput.value;
+        const videoItag = videoFormatSelect.value;
+        const audioItag = audioFormatSelect.value;
+
+        if (!videoItag || !audioItag) {
+            alert("Please select both video and audio formats.");
+            return;
+        }
+
+        loadingIndicator.classList.remove("hidden");
+
+        try {
+            const response = await fetch(`https://9c628245-3814-4ecd-a755-6d4de0467c5c-00-3tzwugoleljgd.spock.replit.dev/streaming?url=${encodeURIComponent(videoUrl)}&videoItag=${videoItag}&audioItag=${audioItag}`);
+            const data = await response.json();
+
+            if (data.success) {
+                result.textContent = `Streaming URL: ${data.link}`;
+            } else {
+                alert(`Error fetching streaming URL: ${data.error}`);
+            }
+        } catch (error) {
+            alert(`Error fetching streaming URL: ${error.message}`);
+        } finally {
+            loadingIndicator.classList.add("hidden");
+        }
+    });
 });
