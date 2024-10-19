@@ -4,25 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Downloader</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
         <h1>YouTube Video Downloader</h1>
         <input type="text" id="videoUrl" placeholder="Enter YouTube video URL" required>
-        <button id="downloadBtn">Get Download Link</button>
+        <button id="fetchFormatsBtn">Get Formats</button>
+        
+        <div id="formatSelection" class="hidden">
+            <h2>Select Download Options</h2>
+            <label for="videoFormat">Video Format:</label>
+            <select id="videoFormat"></select>
+            <br/>
+            <label for="audioFormat">Audio Format:</label>
+            <select id="audioFormat"></select>
+            <br/>
+            <label for="subtitles">Download Subtitles:</label>
+            <input type="checkbox" id="subtitles" />
+            <br/>
+            <button id="downloadBtn">Download</button>
+        </div>
+        
         <p id="result"></p>
         
-        <!-- Loading indicator -->
         <div id="loadingIndicator" class="hidden">Processing...</div>
         
-        <!-- Warning message for streaming URL -->
         <div class="warning-bubble">
             This returns a streaming URL. To download, select the 3 dots in the video playback and choose "Download".
         </div>
         
-        <!-- Disclaimer message -->
         <div class="disclaimer-bubble">
             We are not responsible for any misuse of this product.
         </div>
