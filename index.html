@@ -12,6 +12,9 @@
         <h1>YouTube Video Downloader</h1>
         <input type="text" id="videoUrl" placeholder="Enter YouTube video URL" required>
         <button id="getFormatsBtn">Get Available Formats</button>
+
+        <!-- Loading indicator -->
+        <div id="loading" class="hidden">Loading...</div>
         
         <!-- Dropdowns for video and audio formats -->
         <div id="formatSelection" class="hidden">
@@ -26,9 +29,6 @@
 
         <p id="result"></p>
         
-        <!-- Loading indicator -->
-        <div id="loadingIndicator" class="hidden">Processing...</div>
-        
         <!-- Warning message for streaming URL -->
         <div class="warning-bubble">
             This returns a streaming URL. To download, select the 3 dots in the video playback and choose "Download".
@@ -39,5 +39,64 @@
             We are not responsible for any misuse of this product.
         </div>
     </div>
+
+    <style>
+        /* Styles for the container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Styles for the input field and buttons */
+        input[type="text"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Styles for dropdowns */
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Hidden class for loading and format selection */
+        .hidden {
+            display: none;
+        }
+
+        /* Styles for warning and disclaimer bubbles */
+        .warning-bubble,
+        .disclaimer-bubble {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: left;
+        }
+    </style>
 </body>
 </html>
