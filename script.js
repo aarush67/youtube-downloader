@@ -11,10 +11,10 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
         if (response.ok && data.success) {
             const downloadLink = data.link;
 
-            // Trigger download on the client side
+            // Create a hidden <a> element and trigger a download on the client side
             const a = document.createElement('a');
             a.href = downloadLink;
-            a.download = ''; // Prompt download
+            a.download = ''; // The browser will suggest a file name based on the content
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
