@@ -22,35 +22,41 @@ document.getElementById('getFormatsBtn').addEventListener('click', async () => {
             videoFormatSelect.innerHTML = '';
             audioFormatSelect.innerHTML = '';
 
-            // Populate video formats dropdown
-            data.formats.forEach(format => {
-                if (format.mime.includes('video/')) {
-                    const option = document.createElement('option');
-                    option.value = format.itag;
-                    option.textContent = `${format.resolution} (${format.quality})`;
-                    videoFormatSelect.appendChild(option);
-                }
-            });
+            // Ensure formats are defined
+            if (Array.isArray(data.formats)) {
+                // Populate video formats dropdown
+                data.formats.forEach(format => {
+                    if (format.mime && format.mime.includes('video/')) { // Check if format.mime is defined
+                        const option = document.createElement('option');
+                        option.value = format.itag;
+                        option.textContent = `${format.resolution} (${format.quality})`;
+                        videoFormatSelect.appendChild(option);
+                    }
+                });
 
-            // Populate audio formats dropdown
-            data.formats.forEach(format => {
-                if (format.mime.includes('audio/')) {
-                    const option = document.createElement('option');
-                    option.value = format.itag;
-                    option.textContent = `${format.abr} kbps`;
-                    audioFormatSelect.appendChild(option);
-                }
-            });
+                // Populate audio formats dropdown
+                data.formats.forEach(format => {
+                    if (format.mime && format.mime.includes('audio/')) { // Check if format.mime is defined
+                        const option = document.createElement('option');
+                        option.value = format.itag;
+                        option.textContent = `${format.abr} kbps`;
+                        audioFormatSelect.appendChild(option);
+                    }
+                });
+            } else {
+                resultParagraph.textContent = 'No formats available for this video.';
+            }
 
             // Show format selection section
             formatSelection.classList.remove('hidden');
         } else {
-            resultParagraph.textContent = `Error: ${data.error}`;
+            resultParagraph.textContent = `Error: ${data.error || 'Unknown error'}`;
         }
     } catch (error) {
         // Hide loading indicator in case of error
         loadingIndicator.classList.add('hidden');
         resultParagraph.textContent = `Error fetching the formats: ${error.message}`;
+        console.error(error); // Log the error to the console for debugging
     }
 });
 
@@ -77,11 +83,12 @@ document.getElementById('streamBtn').addEventListener('click', async () => {
             resultParagraph.innerHTML = `Streaming Link: <a href="${streamingLink}" target="_blank">Click here to stream</a>`;
             window.location.href = streamingLink; // Redirect to streaming URL
         } else {
-            resultParagraph.textContent = `Error: ${data.error}`;
+            resultParagraph.textContent = `Error: ${data.error || 'Unknown error'}`;
         }
     } catch (error) {
         // Hide loading indicator in case of error
         loadingIndicator.classList.add('hidden');
         resultParagraph.textContent = `Error fetching the streaming link: ${error.message}`;
+        console.error(error); // Log the error to the console for debugging
     }
 });
