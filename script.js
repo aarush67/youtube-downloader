@@ -45,11 +45,11 @@ document.addEventListener("DOMContentLoaded", () => {
         audioFormatSelect.innerHTML = "";
 
         formats.forEach((format) => {
-            // Only include formats with video
+            // Only include formats with valid video information
             if (format.mime.includes("video") && format.resolution) {
                 const option = document.createElement("option");
                 option.value = format.itag;
-                option.textContent = `${format.resolution} - ${format.mime} - ${format.quality}`;
+                option.textContent = `${format.resolution} - ${format.mime} - ${format.quality || 'N/A'}`;
                 videoFormatSelect.appendChild(option);
             }
 
