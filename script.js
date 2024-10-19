@@ -45,18 +45,19 @@ document.addEventListener("DOMContentLoaded", () => {
         audioFormatSelect.innerHTML = "";
 
         formats.forEach((format) => {
-            // Only include formats with audio and video
-            if (format.mime.includes("video") && format.abr) {
+            // Only include formats with video
+            if (format.mime.includes("video") && format.resolution) {
                 const option = document.createElement("option");
                 option.value = format.itag;
-                option.textContent = `${format.resolution} - ${format.quality} - ${format.abr}`;
+                option.textContent = `${format.resolution} - ${format.mime} - ${format.quality}`;
                 videoFormatSelect.appendChild(option);
             }
 
+            // Include audio formats
             if (format.mime.includes("audio")) {
                 const option = document.createElement("option");
                 option.value = format.itag;
-                option.textContent = `${format.abr} - ${format.mime}`;
+                option.textContent = `${format.abr || 'N/A'} - ${format.mime}`;
                 audioFormatSelect.appendChild(option);
             }
         });
