@@ -11,7 +11,7 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
         if (response.ok && data.success) {
             const downloadLink = data.link;
 
-            // Trigger download of the returned file link
+            // Trigger download on the client side
             const a = document.createElement('a');
             a.href = downloadLink;
             a.download = ''; // Prompt download
