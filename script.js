@@ -11,15 +11,15 @@ document.getElementById('downloadBtn').addEventListener('click', async () => {
         if (response.ok && data.success) {
             const downloadLink = data.link;
 
-            // Create a hidden <a> element and trigger a download on the client side
+            // Create a hidden <a> element to trigger a download
             const a = document.createElement('a');
             a.href = downloadLink;
-            a.download = ''; // The browser will suggest a file name based on the content
+            a.download = ''; // Use the browser's default file name
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
 
-            resultParagraph.innerHTML = `Download initiated. If it doesn't start automatically, <a href="${downloadLink}" target="_blank">click here to download</a>.`;
+            resultParagraph.innerHTML = `Download initiated. If it doesn't start, <a href="${downloadLink}" target="_blank">click here to download</a>.`;
         } else {
             resultParagraph.textContent = `Error: ${data.error}`;
         }
