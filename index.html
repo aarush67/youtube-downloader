@@ -9,22 +9,29 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        input, button {
-            padding: 10px;
-            margin: 5px;
-            font-size: 16px;
-        }
         #result {
             margin-top: 20px;
+        }
+        #downloadButton {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #downloadButton:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h1>YouTube Video Downloader</h1>
-    <input type="text" id="videoUrl" placeholder="Enter YouTube URL" required>
-    <button id="downloadButton">Download Video</button>
-    <div id="result"></div>
 
-    <script src="script.js"></script>
+<h1>YouTube Video Downloader</h1>
+<input type="text" id="videoUrl" placeholder="Enter YouTube Video URL" style="width: 300px;">
+<button id="downloadButton">Download Video</button>
+
+<div id="result"></div>
+
+<script src="script.js"></script>
 </body>
 </html>
