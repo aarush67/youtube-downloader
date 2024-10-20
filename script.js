@@ -26,8 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
 
             if (data.success) {
-                populateFormatDropdowns(data.formats);
-                formatSelection.classList.remove("hidden");
+                // Check if formats are available and parse them correctly
+                if (data.formats && data.formats.length > 0) {
+                    populateFormatDropdowns(data.formats);
+                    formatSelection.classList.remove("hidden");
+                } else {
+                    alert("No formats available for this video.");
+                }
             } else {
                 alert(`Error fetching formats: ${data.error}`);
             }
@@ -45,22 +50,29 @@ document.addEventListener("DOMContentLoaded", () => {
         audioFormatSelect.innerHTML = "";
 
         formats.forEach((format) => {
-            // Only include formats with valid video information
-            if (format.mime.includes("video") && format.resolution) {
-                const option = document.createElement("option");
-                option.value = format.itag;
-                option.textContent = `${format.resolution} - ${format.mime} - ${format.quality || 'N/A'}`;
-                videoFormatSelect.appendChild(option);
-            }
+            // Clean up the format data to prevent any malformed entries
+            const { itag, resolution, mime, quality, abr } = format;
 
-            // Include audio formats
-            if (format.mime.includes("audio")) {
-                const option = document.createElement("option");
-                option.value = format.itag;
-                option.textContent = `${format.abr || 'N/A'} - ${format.mime}`;
-                audioFormatSelect.appendChild(option);
+            // Check if the format has valid data and is not corrupted
+            if (mime && resolution && (mime.includes("video") || mime.includes("audio"))) {
+                if (mime.includes("video")) {
+                    const option = document.createElement("option");
+                    option.value = itag;
+                    option.textContent = `${resolution} - ${mime} - ${quality || 'N/A'}`;
+                    videoFormatSelect.appendChild(option);
+                } else if (mime.includes("audio")) {
+                    const option = document.createElement("option");
+                    option.value = itag;
+                    option.textContent = `${abr || 'N/A'} - ${mime}`;
+                    audioFormatSelect.appendChild(option);
+                }
             }
         });
+
+        // Show an alert if no valid formats were found
+        if (!videoFormatSelect.options.length && !audioFormatSelect.options.length) {
+            alert("No valid formats found for this video.");
+        }
     }
 
     // Event listener to get streaming URL
