@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
         result.textContent = ""; // Clear previous result
 
         try {
-            const response = await fetch(`https://9c628245-3814-4ecd-a755-6d4de0467c5c-00-3tzwugoleljgd.spock.replit.dev/formats?url=${encodeURIComponent(videoUrl)}`);
+            const response = await fetch(`https://youtube-downloaderaarush.vercel.app/formats?url=${encodeURIComponent(videoUrl)}`);
             const data = await response.json();
 
             if (data.success && data.formats && data.formats.length > 0) {
@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleLoading(true);
 
         try {
-            const response = await fetch(`https://9c628245-3814-4ecd-a755-6d4de0467c5c-00-3tzwugoleljgd.spock.replit.dev/streaming?url=${encodeURIComponent(videoUrl)}&videoItag=${videoItag}&audioItag=${audioItag}`);
+            const response = await fetch(`https://youtube-downloaderaarush.vercel.app/streaming?url=${encodeURIComponent(videoUrl)}&videoItag=${videoItag}&audioItag=${audioItag}`);
             const data = await response.json();
 
             if (data.success) {
